@@ -134,93 +134,80 @@ public class MessierCatalogue
         return string.Join("\n", messiers.Select(c => Display(c)));
     }
     
-    public List<Messier> Sort(string data, string order, int maxResults = 20)
+    public List<Messier> Sort(string data, string order = "ascending", int maxResults = 20)
     {
         var sorterContacts = messiers.Where(c => c != null).ToList();
-
-        Func<string, int> extractNumericPart = name =>
-        {
-            if (string.IsNullOrEmpty(name))
-            {
-                return 0;
-            }
-            
-            var match = System.Text.RegularExpressions.Regex.Match(name, @"\d+");
-            return match.Success 
-                ? int.Parse(match.Value) 
-                : 0;
-        };
 
         switch (data.ToLower())
         {
             case "messier catalogue number":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => extractNumericPart(c.Name)).ToList()
-                    : sorterContacts.OrderBy(c => extractNumericPart(c.Name)).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Name)).ThenByDescending(c => ExtractNumericPart(c.Name)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Name)).ThenBy(c => ExtractNumericPart(c.Name)).ToList();
                 break;
                 
             case "ngc (or other) catalogue number":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.NGC ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.NGC ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.NGC)).ThenByDescending(c => ExtractNumericPart(c.NGC)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.NGC)).ThenBy(c => ExtractNumericPart(c.NGC)).ToList();
                 break;
                 
             case "constellation":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.Constellation ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.Constellation ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Constellation)).ThenByDescending(c => ExtractNumericPart(c.Constellation)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Constellation)).ThenBy(c => ExtractNumericPart(c.Constellation)).ToList();
                 break;
                 
             case "object class":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.Class ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.Class ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Class)).ThenByDescending(c => ExtractNumericPart(c.Class)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Class)).ThenBy(c => ExtractNumericPart(c.Class)).ToList();
                 break;
                     
             case "right ascension":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.RightAscension ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.RightAscension ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.RightAscension)).ThenByDescending(c => ExtractNumericPart(c.RightAscension)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.RightAscension)).ThenBy(c => ExtractNumericPart(c.RightAscension)).ToList();
                 break;
                     
             case "declination":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.Declination ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.Declination ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Declination)).ThenByDescending(c => ExtractNumericPart(c.Declination)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Declination)).ThenBy(c => ExtractNumericPart(c.Declination)).ToList();
                 break;
                     
             case "visual magnitude":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.Magnitude ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.Magnitude ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Magnitude)).ThenByDescending(c => ExtractNumericPart(c.Magnitude)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Magnitude)).ThenBy(c => ExtractNumericPart(c.Magnitude)).ToList();
                 break;
                     
-            case "diameter:":
+            case "diameter":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.AngularSize ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.AngularSize ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.AngularSize)).ThenByDescending(c => ExtractNumericPart(c.AngularSize)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.AngularSize)).ThenBy(c => ExtractNumericPart(c.AngularSize)).ToList();
                 break;
                     
             case "burnham's code":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.Burnham ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.Burnham ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Burnham)).ThenByDescending(c => ExtractNumericPart(c.Burnham)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Burnham)).ThenBy(c => ExtractNumericPart(c.Burnham)).ToList();
                 break;
                     
             case "remarks":
                     
-                sorterContacts = order.ToLower() == "desc"
-                    ? sorterContacts.OrderByDescending(c => c.Remarks ?? string.Empty).ToList()
-                    : sorterContacts.OrderBy(c => c.Remarks ?? string.Empty).ToList();
+                sorterContacts = order.ToLower() == "descending"
+                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Remarks)).ThenByDescending(c => ExtractNumericPart(c.Remarks)).ToList()
+                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Remarks)).ThenBy(c => ExtractNumericPart(c.Remarks)).ToList();
                 break;
             
             default:
@@ -228,5 +215,31 @@ public class MessierCatalogue
         }
 
         return sorterContacts.Take(maxResults).ToList();
+    }
+
+    private decimal ExtractNumericPart(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            return 0;
+        }
+        
+        var match = System.Text.RegularExpressions.Regex.Match(value, @"\d+(\.\d+)?");
+        return match.Success
+            ? decimal.Parse(match.Value)
+            : 0;
+    }
+    
+    private string ExtractAlphabeticalPart(string name)
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            return string.Empty;
+        }
+
+        var match = System.Text.RegularExpressions.Regex.Match(name, @"^[A-Za-z]+");
+        return match.Success 
+            ? match.Value 
+            : string.Empty;
     }
 }

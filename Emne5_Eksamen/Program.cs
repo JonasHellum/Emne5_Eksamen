@@ -31,5 +31,17 @@ Console.WriteLine("\nSearch query: M31");
 Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Search("M31")));
 
 
-Console.WriteLine("\nSorting query: Messier catalogue number");
-Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("messier catalogue number", "desc")));
+Console.WriteLine("\nSorting query: Messier catalogue number, descending");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("messier catalogue number", "descending")));
+
+Console.WriteLine("\nSorting query: NGC (or other) catalogue number, ascending");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("NGC (or other) catalogue number")));
+
+Console.WriteLine("\nSorting query: Visual magnitude, descending");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("Visual magnitude", "descending")));
+
+Console.WriteLine("\nSorting query: Remarks, ascending");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("Remarks", "ascending")));
+
+Console.WriteLine("\nSorting query: Diameter, ascending");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("Diameter", "ascending")));
