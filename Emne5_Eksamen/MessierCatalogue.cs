@@ -65,16 +65,6 @@ public class MessierCatalogue
                     }
                 }
                 
-                // try
-                // {
-                //     NGC = int.Parse(values[1]);
-                // }
-                // catch (Exception e)
-                // {
-                //     Console.WriteLine($"Error in column: \"NGC\" on line: \"{lineNr + 1}\`": \"{e.Message}\"");
-                //     parseError = true;
-                // }
-                
                 // If no errors the objects get saved to a list.
                 if (!parseError)
                 {
@@ -233,17 +223,17 @@ public class MessierCatalogue
     
     
     // Compares the values and returns less than zero, zero or greater than zero.
-    private int CompareValues(string first, string second)
+    private int CompareValues(string candidateValue, string currentValue)
     {
-        var alphabetFirst = ExtractAlphabeticalPart(first);
-        var alphabetSecond = ExtractAlphabeticalPart(second);
+        var alphabetFirst = ExtractAlphabeticalPart(candidateValue);
+        var alphabetSecond = ExtractAlphabeticalPart(currentValue);
 
         int alphabeticalComparison = string.Compare(alphabetFirst, alphabetSecond, StringComparison.OrdinalIgnoreCase);
 
         if (alphabeticalComparison == 0)
         {
-            decimal numericFirst = ExtractNumericPart(first);
-            decimal numericSecond = ExtractNumericPart(second);
+            decimal numericFirst = ExtractNumericPart(candidateValue);
+            decimal numericSecond = ExtractNumericPart(currentValue);
             
             return numericFirst.CompareTo(numericSecond);
         }
@@ -304,7 +294,7 @@ public class MessierCatalogue
         {
             int minOrMaxIndex = i;
 
-            // Loops over values to find the corresponding value to place at index i
+            // Loops over values to find the correct value to place at index i
             for (int j = i + 1; j < list.Count; j++)
             {
                 // Checks if the values should be swapped

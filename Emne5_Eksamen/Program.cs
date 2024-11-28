@@ -50,19 +50,5 @@ Console.WriteLine(MessierCatalogue.DisplayAll(filteredList.Search("Open"))); // 
 Console.WriteLine("\nSearching for \"Galaxy\" in a filtered list in field \"Constellation\" inside \"Virgo\"");
 Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Filter("Constellation", "Virgo").Search("Galaxy")));
 
-Console.WriteLine("\nSorting for \"Visual magnitude\" in a filtered list in field \"Constellation\" inside \"Virgo\"");
+Console.WriteLine("\nSorting by \"Visual magnitude\" in a filtered list in field \"Constellation\" inside \"Virgo\"");
 Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Filter("Constellation", "Virgo").Sort("Visual magnitude")));
-
-
-
-
-
-
-
-
-
-
-
-
-
-
