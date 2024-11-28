@@ -3,7 +3,8 @@
 public class MessierCatalogue
 {
     private List<Messier> messiers = new List<Messier>();
-    
+
+    #region Question 1
     public List<Messier> GetMessiersFromCsv(string csvFile)
     {
         if (!File.Exists(csvFile))
@@ -84,11 +85,9 @@ public class MessierCatalogue
                 lineNr++;
             }
         }
-
+        
         return messiers;
     }
-    
-    
     
     public static string Display(Messier messier)
     {
@@ -103,26 +102,6 @@ public class MessierCatalogue
                $"Remarks: {messier.Remarks}";
     }
     
-    public List<Messier> Search(string messierInfo, int maxResults = 10)
-    {
-        var results = messiers
-            .Where(c => c != null &&
-                        (c.Name.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.NGC.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.Constellation.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.Class.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.RightAscension.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.Declination.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.Magnitude.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.AngularSize.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.Burnham.Contains(messierInfo, StringComparison.OrdinalIgnoreCase) ||
-                         c.Remarks.Contains(messierInfo, StringComparison.OrdinalIgnoreCase)))
-            .Take(maxResults)
-            .ToList();
-    
-        return results;
-    }
-    
     public static string DisplayAll(List<Messier> messiers)
     {
         if (messiers.Count == 0)
@@ -134,89 +113,145 @@ public class MessierCatalogue
         return string.Join("\n", messiers.Select(c => Display(c)));
     }
     
-    public List<Messier> Sort(string data, string order = "ascending", int maxResults = 20)
+    #endregion
+    
+    #region Question 1.1
+    
+    // Linear Search
+    private bool Find(string field, string value)
     {
-        var sorterContacts = messiers.Where(c => c != null).ToList();
+        field = field.ToLower();
+        value = value.ToLower();
 
-        switch (data.ToLower())
+        // Looping through the fields in (Messier) to check if value exists until the
+        // remaining characters is the same as value (searching for) then ends
+        for (int i = 0; i <= field.Length - value.Length; i++)
         {
-            case "messier catalogue number":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Name)).ThenByDescending(c => ExtractNumericPart(c.Name)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Name)).ThenBy(c => ExtractNumericPart(c.Name)).ToList();
-                break;
-                
-            case "ngc (or other) catalogue number":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.NGC)).ThenByDescending(c => ExtractNumericPart(c.NGC)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.NGC)).ThenBy(c => ExtractNumericPart(c.NGC)).ToList();
-                break;
-                
-            case "constellation":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Constellation)).ThenByDescending(c => ExtractNumericPart(c.Constellation)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Constellation)).ThenBy(c => ExtractNumericPart(c.Constellation)).ToList();
-                break;
-                
-            case "object class":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Class)).ThenByDescending(c => ExtractNumericPart(c.Class)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Class)).ThenBy(c => ExtractNumericPart(c.Class)).ToList();
-                break;
-                    
-            case "right ascension":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.RightAscension)).ThenByDescending(c => ExtractNumericPart(c.RightAscension)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.RightAscension)).ThenBy(c => ExtractNumericPart(c.RightAscension)).ToList();
-                break;
-                    
-            case "declination":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Declination)).ThenByDescending(c => ExtractNumericPart(c.Declination)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Declination)).ThenBy(c => ExtractNumericPart(c.Declination)).ToList();
-                break;
-                    
-            case "visual magnitude":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Magnitude)).ThenByDescending(c => ExtractNumericPart(c.Magnitude)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Magnitude)).ThenBy(c => ExtractNumericPart(c.Magnitude)).ToList();
-                break;
-                    
-            case "diameter":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.AngularSize)).ThenByDescending(c => ExtractNumericPart(c.AngularSize)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.AngularSize)).ThenBy(c => ExtractNumericPart(c.AngularSize)).ToList();
-                break;
-                    
-            case "burnham's code":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Burnham)).ThenByDescending(c => ExtractNumericPart(c.Burnham)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Burnham)).ThenBy(c => ExtractNumericPart(c.Burnham)).ToList();
-                break;
-                    
-            case "remarks":
-                    
-                sorterContacts = order.ToLower() == "descending"
-                    ? sorterContacts.OrderByDescending(c => ExtractAlphabeticalPart(c.Remarks)).ThenByDescending(c => ExtractNumericPart(c.Remarks)).ToList()
-                    : sorterContacts.OrderBy(c => ExtractAlphabeticalPart(c.Remarks)).ThenBy(c => ExtractNumericPart(c.Remarks)).ToList();
-                break;
+            bool found = true;
             
-            default:
-                throw new ArgumentException($"Invalid sorting field: {data}");
+            // Checking each character in field that starts at current i index against value[j]
+            for (int j = 0; j < value.Length; j++)
+            {
+                if (field[i + j] != value[j])
+                {
+                    found = false;
+                    break;
+                }
+            }
+
+            if (found)
+            {
+                return true;
+            }
         }
 
-        return sorterContacts.Take(maxResults).ToList();
+        return false;
     }
+    
+    public List<Messier> Search(string value, int maxResults = 10)
+    {
+        var results = new List<Messier>();
 
+        // Loops through list of messiers and performs a linear search in them.
+        foreach (var m in messiers)
+        {
+            if (m != null &&
+                Find(m.Name, value) ||
+                Find(m.NGC, value) ||
+                Find(m.Constellation, value) ||
+                Find(m.Class, value) ||
+                Find(m.RightAscension, value) ||
+                Find(m.Declination, value) ||
+                Find(m.Magnitude, value) ||
+                Find(m.AngularSize, value) ||
+                Find(m.Burnham, value) ||
+                Find(m.Remarks, value))
+            {
+                results.Add(m);
+                
+                if (results.Count >= maxResults)
+                {
+                    break;
+                }
+            }
+        }
+        
+        return results.ToList();
+    }
+    #endregion
+    
+    #region Question 1.2
+    
+    private bool IsValidField(string field)
+    {
+        var validFields = new HashSet<string>
+        {
+            "messier catalogue number",
+            "ngc (or other) catalogue number",
+            "constellation",
+            "object class",
+            "right ascension",
+            "declination",
+            "visual magnitude",
+            "diameter",
+            "burnham's code",
+            "remarks"
+        };
+    
+        return validFields.Contains(field.ToLower());
+    }
+    
+    private string GetFieldValue(Messier messier, string field)
+    {
+        switch (field.ToLower())
+        {
+            case "messier catalogue number":
+                return messier.Name;
+            case "ngc (or other) catalogue number":
+                return messier.NGC;
+            case "constellation":
+                return messier.Constellation;
+            case "object class":
+                return messier.Class;
+            case "right ascension":
+                return messier.RightAscension;
+            case "declination":
+                return messier.Declination;
+            case "visual magnitude":
+                return messier.Magnitude;
+            case "diameter":
+                return messier.AngularSize;
+            case "burnham's code":
+                return messier.Burnham;
+            case "remarks":
+                return messier.Remarks;
+            default:
+                Console.WriteLine($"Invalid sorting field: {field}");
+                return null;
+        }
+    }
+    
+    
+    // Compares the values and returns less than zero, zero or greater than zero.
+    private int CompareValues(string first, string second)
+    {
+        var alphabetFirst = ExtractAlphabeticalPart(first);
+        var alphabetSecond = ExtractAlphabeticalPart(second);
+
+        int alphabeticalComparison = string.Compare(alphabetFirst, alphabetSecond, StringComparison.OrdinalIgnoreCase);
+
+        if (alphabeticalComparison == 0)
+        {
+            decimal numericFirst = ExtractNumericPart(first);
+            decimal numericSecond = ExtractNumericPart(second);
+            
+            return numericFirst.CompareTo(numericSecond);
+        }
+
+        return alphabeticalComparison;
+    }
+    
+    
     private decimal ExtractNumericPart(string value)
     {
         if (string.IsNullOrEmpty(value))
@@ -242,4 +277,118 @@ public class MessierCatalogue
             ? match.Value 
             : string.Empty;
     }
+    
+    // Checks and swaps Messier objects.
+    private bool ShouldSwap(Messier first, Messier second, string field, string order)
+    {
+        bool isDescending = order.ToLower() == "descending";
+
+        string fieldFirst = GetFieldValue(first, field);
+        string fieldSecond = GetFieldValue(second, field);
+
+        
+        int comparison = CompareValues(fieldFirst, fieldSecond);
+
+        return isDescending 
+            ? comparison > 0  // Swap if descending and first value is > second
+            : comparison < 0; // Swap if ascending and first value is < second
+                            // If neither of these conditions are met the values are in correct order and doesn't swap.
+    }
+    
+    private void SelectionSort(List<Messier> list, string field, string order)
+    {
+        // Loops over the list of messier objects.
+        for (int i = 0; i < list.Count - 1; i++)
+        {
+            int minOrMaxIndex = i;
+
+            // Loops over values to find the corresponding value to place at index i
+            for (int j = i + 1; j < list.Count; j++)
+            {
+                // Checks if the values should be swapped
+                bool condition = ShouldSwap(list[j], list[minOrMaxIndex], field, order);
+
+                // update minOrMaxIndex if current value should be before current MinOrMaxIndex value
+                if (condition)
+                    minOrMaxIndex = j;
+            }
+            
+            // Swap values if value at index i is not the same as minOrMaxIndex
+            if (i != minOrMaxIndex)
+            {
+                (list[i], list[minOrMaxIndex]) = (list[minOrMaxIndex], list[i]);
+            }
+        }
+    }
+    
+    public List<Messier> Sort(string field, string order = "ascending", int maxResults = 20)
+    {
+        if (!IsValidField(field))
+        {
+            Console.WriteLine($"Invalid sorting field: {field}");
+            return new List<Messier>();
+        }
+        
+        var sortedMessiers = messiers.Where(c => c != null).ToList();
+        SelectionSort(sortedMessiers, field, order);
+        return sortedMessiers.Take(maxResults).ToList();
+    }
+    #endregion
+
+    #region Question 3
+    public MessierCatalogue Filter(string field, string value)
+    {
+        var filteredMessiers = messiers.Where(m => m != null).ToList();
+        
+        switch (field.ToLower())
+        {
+            case "messier catalogue number":
+                filteredMessiers =
+                    filteredMessiers.Where(m => m.Name.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "ngc (or other) catalogue number":
+                filteredMessiers =
+                    filteredMessiers.Where(m => m.NGC.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "constellation":
+                filteredMessiers = 
+                    filteredMessiers.Where(m => m.Constellation.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "object class":
+                filteredMessiers =
+                    filteredMessiers.Where(m => m.Class.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "right ascension":
+                filteredMessiers = 
+                    filteredMessiers.Where(m => m.RightAscension.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "declination":
+                filteredMessiers =
+                    filteredMessiers.Where(m => m.Declination.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "visual magnitude":
+                filteredMessiers =
+                    filteredMessiers.Where(m => m.Magnitude.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "diameter":
+                filteredMessiers =
+                    filteredMessiers.Where(m => m.AngularSize.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "burnham's code":
+                filteredMessiers = 
+                    filteredMessiers.Where(m => m.Burnham.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            case "remarks":
+                filteredMessiers = 
+                    filteredMessiers.Where(m => m.Remarks.Contains(value, StringComparison.OrdinalIgnoreCase)).ToList();
+                break;
+            default:
+                Console.WriteLine($"Invalid sorting field: {field}");
+                return new MessierCatalogue { messiers = new List<Messier>() };
+        }
+        
+        return new MessierCatalogue { messiers = filteredMessiers };
+    }
+    #endregion
+    
 }

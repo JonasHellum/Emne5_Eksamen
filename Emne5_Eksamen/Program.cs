@@ -13,7 +13,7 @@ if (messiers == null || !messiers.Search("").Any())
 }
 
 Console.WriteLine("");
-Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Search("", 10000)));
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Search("", maxResults: 1000)));
 
 Console.WriteLine("\nSearch query: Nebula");
 Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Search("Nebula")));
@@ -31,8 +31,12 @@ Console.WriteLine("\nSearch query: M31");
 Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Search("M31")));
 
 
+Console.WriteLine("\nSearch query: M31231231231");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Search("M31231231231")));
+
+
 Console.WriteLine("\nSorting query: Messier catalogue number, descending");
-Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("messier catalogue number", "descending")));
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("messier catalogue number", "descending", 30)));
 
 Console.WriteLine("\nSorting query: NGC (or other) catalogue number, ascending");
 Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("NGC (or other) catalogue number")));
@@ -45,3 +49,34 @@ Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("Remarks", "ascendin
 
 Console.WriteLine("\nSorting query: Diameter, ascending");
 Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("Diameter", "ascending")));
+
+Console.WriteLine("\nTest:");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Sort("Diameterrr", "ascending")));
+
+
+Console.WriteLine("\nSearching for \"Open\" in a filtered list in field \"Constellation\" inside \"Sagittarius\"");
+var filteredList = messiers.Filter("Constellation", "Sagittarius");
+Console.WriteLine(MessierCatalogue.DisplayAll(filteredList.Search("Open"))); // There is no "Galaxy" within "Sagittarius"
+
+Console.WriteLine("\nTest:");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Filter("Constellationawd", "Virgo").Search("Galaxy")));
+
+Console.WriteLine("\nSearching for \"Galaxy\" in a filtered list in field \"Constellation\" inside \"Virgo\"");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Filter("Constellation", "Virgo").Search("Galaxy")));
+
+Console.WriteLine("\nSorting for \"Visual magnitude\" in a filtered list in field \"Constellation\" inside \"Virgo\"");
+Console.WriteLine(MessierCatalogue.DisplayAll(messiers.Filter("Constellation", "Virgo").Sort("Visual magnitude")));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
