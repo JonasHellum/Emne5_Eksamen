@@ -20,4 +20,25 @@ When a match is found, the corresponding Messier object is added to a new list. 
 After processing all objects, the method returns this list containing all matching results. <br/>
 
 ## Sort
+The sorting functionality in my project is implemented using a custom selection sort algorithm.  <br/>
 
+Here’s how the Sort() method works: It firsts validates if the provided field is valid using IsValidField() <br/>
+which checks if the field matches something inside the method. <br/>
+
+Then it sends the list of Messier objects to SelectionSort(), the outer loop loops over starting positions<br/>
+and moves to the next position if the inner loop doesn’t find a match. <br/>
+Inner loop loops over the values to find the correct value to place at i, <br/>
+it uses bool and ShouldSwap() to find out if it should be swapped, if they should be swapped it <br/>
+changes the position of index minOrMax to current value then checks if  position of index i and minOrMax <br/>
+is not the same it swaps the position. <br/>
+
+ShouldSwap() takes in the current value of the outer loop and the value of the inner loop, <br/>
+get’s the values from field using GetFieldValue() and uses CompareValues() to compare them, <br/>
+sends back true or false depending on which order the values should be in also depending on descending or ascending. <br/>
+ 
+
+CompareValues() compares two strings taking into account both alphabetical and numerical <br/>
+characters through the ExtractNumericPart() and ExtractAlphabeticalPart() which uses regex to parse the values. <br/>
+
+The Sort() method sorts a list of Messier objects based on the field, as an example: “messier catalogue number” <br/>
+returns a list which is sorted with messier catalogue number and can decide if it’s ascending or descending. <br/>
