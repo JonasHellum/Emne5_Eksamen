@@ -52,7 +52,7 @@ public class MessierCatalogue
                 
                 if (values.Length != 10) // Checks that the format is correct
                 {
-                    Console.WriteLine($"Error on line: \"{lineNr + 1}\": No valid format.");
+                    Console.WriteLine($"Error on line: \"{lineNr + 1}\": Not a valid format.");
                     // parseError = true;
                 }
                 
@@ -279,19 +279,21 @@ public class MessierCatalogue
     }
     
     // Checks and swaps Messier objects.
-    private bool ShouldSwap(Messier first, Messier second, string field, string order)
+    private bool ShouldSwap(Messier candidateElement, Messier currentElement, string field, string order)
     {
         bool isDescending = order.ToLower() == "descending";
 
-        string fieldFirst = GetFieldValue(first, field);
-        string fieldSecond = GetFieldValue(second, field);
-
         
-        int comparison = CompareValues(fieldFirst, fieldSecond);
+        // Value in the candidate element from the inner loop (list[j])
+        string candidateValue = GetFieldValue(candidateElement, field);
+        // Value in the current minimum or maximum element (list[minOrMaxIndex])
+        string currentValue = GetFieldValue(currentElement, field);
+        
+        int comparison = CompareValues(candidateValue, currentValue);
 
         return isDescending 
-            ? comparison > 0  // Swap if descending and first value is > second
-            : comparison < 0; // Swap if ascending and first value is < second
+            ? comparison > 0  // Swap if descending and candidateElement is > currentElement
+            : comparison < 0; // Swap if ascending and candidateElement is < currentElement
                             // If neither of these conditions are met the values are in correct order and doesn't swap.
     }
     
