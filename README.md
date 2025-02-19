@@ -42,7 +42,3 @@ characters through the ExtractNumericPart() and ExtractAlphabeticalPart() which 
 
 The Sort() method sorts a list of Messier objects based on the field, as an example: “messier catalogue number” <br/>
 returns a list which is sorted with messier catalogue number and can decide if it’s ascending or descending. <br/>
-
-## VIDEO
-Forgot to add in the video that in Dijkstra’s Algorithm you continue to find the shortest path until the goal has the smallest value, <br/>
-not when you simply find it.
