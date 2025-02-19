@@ -5,7 +5,7 @@ Jonas Lærke Hellum<br/>
 https://github.com/JonasHellum
 
 ## License
-This project is licensed under the MIT License. For more details, please refer to the LICENSE.txt file.
+This project is licensed under the MIT License. For more details, please refer to the LICENSE file.
 
 ## Search
 My search functionality is built from two methods: Find() and Search(). <br/>
